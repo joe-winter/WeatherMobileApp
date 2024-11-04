@@ -27,12 +27,14 @@ import com.example.weather.R
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import com.example.weather.models.CurrentWeather
 
 
 @Composable
 fun WeatherScreen(
     modifier: Modifier,
-    weatherViewModel: WeatherViewModel = viewModel()
+    weatherViewModel: WeatherViewModel = viewModel(),
+    weather: CurrentWeather = CurrentWeather(),
 ) {
     Column(
         modifier = modifier
@@ -46,19 +48,22 @@ fun WeatherScreen(
             location = weatherViewModel.location
         )
         WeatherImage()
-        WeatherLocationTitle()
+        WeatherLocationTitle(
+            location = weather.locationName,
+            temperature = weather.temperature.toString()
+        )
         WeatherLocationTime()
         Row {
-            WeatherDataCard("Feels Like", "30", modifier = Modifier)
-            WeatherDataCard("Wind Speed", "4.09 km/h", modifier = Modifier)
+            WeatherDataCard("Feels Like", weather.feelsLike.toString(), modifier = Modifier)
+            WeatherDataCard("Wind Speed", weather.windSpeed.toString(), modifier = Modifier)
         }
         Row {
-            WeatherDataCard("UV Index", "3", modifier = Modifier)
-            WeatherDataCard("Cloud Coverage", "4.09 km/h", modifier = Modifier)
+            WeatherDataCard("UV Index", weather.uVIndex.toString(), modifier = Modifier)
+            WeatherDataCard("Cloud Coverage", weather.cloudCoverage.toString(), modifier = Modifier)
         }
         Row {
-            WeatherDataCard("Humidity", "60%", modifier = Modifier)
-            WeatherDataCard("Visibility", "10000km", modifier = Modifier)
+            WeatherDataCard("Humidity", weather.humidity.toString(), modifier = Modifier)
+            WeatherDataCard("Visibility", weather.visibility.toString(), modifier = Modifier)
         }
     }
 }
@@ -78,14 +83,17 @@ fun WeatherSearchBar(
 }
 
 @Composable
-fun WeatherLocationTitle() {
+fun WeatherLocationTitle(
+    location: String,
+    temperature: String
+) {
     Row {
         Column(
             modifier = Modifier
                 .padding(6.dp)
         ) {
             Text(
-                text = "Turin",
+                text = location,
                 fontSize = 32.sp
             )
         }
@@ -94,7 +102,7 @@ fun WeatherLocationTitle() {
                 .padding(6.dp)
         ) {
             Text(
-                text = "32°",
+                text = temperature,
                 fontSize = 32.sp
             )
         }
@@ -137,11 +145,6 @@ fun WeatherDataCard(dataTitle: String, dataText: String, modifier: Modifier) {
     }
 }
 
-@Preview(showBackground = true)
-@Composable
-fun WeatherLocationTitlePreview() {
-    WeatherLocationTitle()
-}
 
 @Preview(showBackground = true)
 @Composable
