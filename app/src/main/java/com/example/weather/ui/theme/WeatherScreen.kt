@@ -8,7 +8,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Scaffold
@@ -22,17 +22,29 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.weather.R
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+
 
 @Composable
-fun WeatherScreen(modifier: Modifier) {
+fun WeatherScreen(
+    modifier: Modifier,
+    weatherViewModel: WeatherViewModel = viewModel()
+) {
     Column(
         modifier = modifier
             .fillMaxWidth(),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        WeatherSearchBar()
+        WeatherSearchBar(
+            onLocationChange = { weatherViewModel.updateLocation(it) },
+            onKeyboardDone = { },
+            location = weatherViewModel.location
+        )
         WeatherImage()
         WeatherLocationTitle()
         WeatherLocationTime()
@@ -52,10 +64,15 @@ fun WeatherScreen(modifier: Modifier) {
 }
 
 @Composable
-fun WeatherSearchBar() {
+fun WeatherSearchBar(
+    onLocationChange: (String) -> Unit,
+    onKeyboardDone: () -> Unit,
+    location: String
+) {
     TextField(
-        value = "",
-        onValueChange = {},
+        value = location,
+        onValueChange = onLocationChange,
+        keyboardActions = KeyboardActions(onDone = { onKeyboardDone() }),
         label = { Text("Search...") },
     )
 }
@@ -109,9 +126,11 @@ fun WeatherDataCard(dataTitle: String, dataText: String, modifier: Modifier) {
         elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
 
     ) {
-        Column(modifier = Modifier
-            .padding(6.dp)
-            .fillMaxSize()) {
+        Column(
+            modifier = Modifier
+                .padding(6.dp)
+                .fillMaxSize()
+        ) {
             Text(text = dataTitle, fontSize = 12.sp)
             Text(dataText, fontWeight = FontWeight.Bold)
         }
