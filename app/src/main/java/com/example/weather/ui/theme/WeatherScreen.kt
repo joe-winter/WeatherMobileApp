@@ -74,7 +74,7 @@ fun WeatherLocationTitle() {
                 .padding(6.dp)
         ) {
             Text(
-                text = "32°",
+                text = "32°Hello",
                 fontSize = 32.sp
             )
         }
