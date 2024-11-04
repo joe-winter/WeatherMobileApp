@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
@@ -16,6 +17,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -74,7 +76,7 @@ fun WeatherLocationTitle() {
                 .padding(6.dp)
         ) {
             Text(
-                text = "32°Hello",
+                text = "32°",
                 fontSize = 32.sp
             )
         }
@@ -102,9 +104,16 @@ fun WeatherDataCard(dataTitle: String, dataText: String, modifier: Modifier) {
     Card(
         modifier = modifier
             .padding(6.dp)
+            .size(width = 120.dp, height = 60.dp),
+        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
+
     ) {
-        Text(dataTitle)
-        Text(dataText)
+        Column(modifier = Modifier
+            .padding(6.dp)
+            .fillMaxSize()) {
+            Text(text = dataTitle, fontSize = 12.sp)
+            Text(dataText, fontWeight = FontWeight.Bold)
+        }
     }
 }
 
@@ -112,6 +121,12 @@ fun WeatherDataCard(dataTitle: String, dataText: String, modifier: Modifier) {
 @Composable
 fun WeatherLocationTitlePreview() {
     WeatherLocationTitle()
+}
+
+@Preview(showBackground = true)
+@Composable
+fun WeatherDataCardPreview() {
+    WeatherDataCard("Humidity", "60%", modifier = Modifier)
 }
 
 @Preview(showBackground = true)
